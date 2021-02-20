@@ -6,11 +6,6 @@ import math
 def loadCSV(filename):
     lines = csv.reader(open(filename,"rt"))
     dataset = list(lines)
-
-    #for i in range(len(dataset)):
-        #dataset[i].pop(0)
-        #dataset[i] = [float(x) for x in dataset[i]]
-
     return dataset
 
 def splitDataset(dataset, splitratio):
@@ -34,7 +29,6 @@ def separateByClass(dataset):
     return separated
 
 def mean(numbers):
-    #print(numbers)
     return sum(numbers)/float(len(numbers))
 
 def stddev(numbers):
@@ -49,21 +43,14 @@ def calculateProbability(x,mean,stddev):
 
 
 def summarize(dataset):
-    #print(dataset)
-    #print("AFTER")
     for i in range(len(dataset)):
         dataset[i].pop(0)
         dataset[i] = [float(x) for x in dataset[i]]
-    #print(dataset)
-    #print("XXXXXXXXXXXXXXXXX")
     summaries = [(mean(attribute),stddev(attribute)) for attribute in zip(*dataset)]
-    #print(attribute for attribute in zip(*dataset))
-    #print("XXXXXXXXXXXXXXXXXXXXXXXXX")
     return summaries
 
 def summarizeByClass(dataset):
     separated = separateByClass(dataset)
-    #print(separated)
     summaries = {}
     for classVal, instance in separated.items():
 
@@ -73,20 +60,12 @@ def summarizeByClass(dataset):
 
 def calculateClassProbability(summaries,inputVector):
     probabilities = {}
-    #print(inputVector)
     for classVal, classSum in summaries.items():
-        #print(classVal)
-        #print(classSum)
         probabilities[classVal] = 1
-        #print(classSum)
         for i in range(len(classSum)):
             mean, stddev = classSum[i]
             x = float(inputVector[i+1])
-            #print("mean: "+ str(mean))
-            #print("stddev: "+ str(stddev))
-            #print("value: "+ str(x))
             probabilities[classVal]*=calculateProbability(x,mean,stddev)
-    #print(probabilities)
     return probabilities
 
 def predict(summaries, inputVector):
